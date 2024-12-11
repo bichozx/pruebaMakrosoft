@@ -1,0 +1,252 @@
+{
+	"info": {
+		"_postman_id": "f0e37931-b691-4fe3-9901-06d7517b5525",
+		"name": "Album CRUD",
+		"description": "Colección de pruebas sobre el recurso Album",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17359245"
+	},
+	"item": [
+		{
+			"name": "Crear un album",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"postman.setGlobalVariable(\"new_id_a\",data.id);",
+							"tests[\"no genera error en el Post\"] = responseCode.code === 200;"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Buscando América\",\n    \"cover\": \"https://i.pinimg.com/564x/aa/5f/ed/aa5fed7fac61cc8f41d1e79db917a7cd.jpg\",\n    \"releaseDate\": \"1984-08-01T00:00:00-05:00\",\n    \"description\": \"Buscando América es el primer álbum de la banda de Rubén Blades y Seis del Solar lanzado en 1984. La producción, bajo el sello Elektra, fusiona diferentes ritmos musicales tales como la salsa, reggae, rock, y el jazz latino. El disco fue grabado en Eurosound Studios en Nueva York entre mayo y agosto de 1983.\",\n    \"genre\": \"Salsa\",\n    \"recordLabel\": \"Elektra\"\n}"
+				},
+				"url": {
+					"raw": "backvynils-q6yc.onrender.com/albums",
+					"host": [
+						"backvynils-q6yc",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"albums"
+					]
+				},
+				"description": "Crea un nuevo album. El Id es inicializado por la BD y se debe ver en la respuesta. \r\n\r\nPara la prueba, se guarda el id en una variable que será utilizada en otras peticiones de la colección.\r\n\r\n**Código http esperado: 200**\r\n\r\n**JSON de salida**\r\n\r\n```\r\n{\r\n    \"name\": \"Buscando América\",\r\n    \"cover\": \"https://i.pinimg.com/564x/aa/5f/ed/aa5fed7fac61cc8f41d1e79db917a7cd.jpg\",\r\n    \"releaseDate\": \"1984-08-01T00:00:00-05:00\",\r\n    \"description\": \"Buscando América es el primer álbum de la banda de Rubén Blades y Seis del Solar lanzado en 1984. La producción, bajo el sello Elektra, fusiona diferentes ritmos musicales tales como la salsa, reggae, rock, y el jazz latino. El disco fue grabado en Eurosound Studios en Nueva York entre mayo y agosto de 1983.\",\r\n    \"genre\": \"Salsa\",\r\n    \"recordLabel\": \"Elektra\",\r\n    \"id\": 1\r\n}\r\n```"
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener todos los albumes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data= JSON.parse(responseBody);",
+							"tests[\"No genera error en el Get all\"] = responseCode.code === 200;",
+							"tests[\"albums count\"] = data.length >= 0;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{protocol}}://{{ip}}/albums",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"albums"
+					]
+				},
+				"description": "Consulta todos los albumes de la aplicación. \r\n\r\nLa petición no tiene cuerpo.\r\n\r\nPara la prueba, se verifica que el conjunto de albumes en la respuesta tenga mas de uno.\r\n\r\n**Código http esperado: 200**\r\n\r\n**JSON de salida**\r\n\r\n```\r\n[\r\n    {\r\n        \"id\": 2,\r\n        \"name\": \"Poeta del Pueblo\",\r\n        \"cover\": \"\",\r\n        \"releaseDate\": \"2011-08-01T05:00:00.000Z\",\r\n        \"description\": \"Recopilación de 27 composiciones del cosmos Blades que los bailadores y melómanos han hecho suyas en estos 40 años de presencia de los ritmos y concordias afrocaribeños en múltiples escenarios internacionales. Grabaciones de Blades para la Fania con las orquestas de Pete Rodríguez, Ray Barreto, Fania All Stars y, sobre todo, los grandes éxitos con la Banda de Willie Colón\",\r\n        \"genre\": \"Salsa\",\r\n        \"recordLabel\": \"Fania Records\",\r\n        \"tracks\": [],\r\n        \"performers\": [],\r\n        \"comments\": []\r\n    },\r\n    {\r\n        \"id\": 1,\r\n        \"name\": \"Buscando América\",\r\n        \"cover\": \"https://i.pinimg.com/564x/aa/5f/ed/aa5fed7fac61cc8f41d1e79db917a7cd.jpg\",\r\n        \"releaseDate\": \"1984-08-01T05:00:00.000Z\",\r\n        \"description\": \"Buscando América es el primer álbum de la banda de Rubén Blades y Seis del Solar lanzado en 1984. La producción, bajo el sello Elektra, fusiona diferentes ritmos musicales tales como la salsa, reggae, rock, y el jazz latino. El disco fue grabado en Eurosound Studios en Nueva York entre mayo y agosto de 1983.\",\r\n        \"genre\": \"Salsa\",\r\n        \"recordLabel\": \"Elektra\",\r\n        \"tracks\": [],\r\n        \"performers\": [],\r\n        \"comments\": []\r\n    }\r\n]\r\n```"
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener un album y sus comentarios",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(responseBody);",
+							"var data = JSON.parse(responseBody);",
+							"tests[\"No genera error en el Get\"] = responseCode.code === 200;"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "backvynils-q6yc.onrender.com/albums/156",
+					"host": [
+						"backvynils-q6yc",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"albums",
+						"156"
+					]
+				},
+				"description": "Consulta un album de la aplicación.  \r\n\r\nLa petición no tiene cuerpo.\r\n\r\nSe envía el id del album deseado por la URL de la petición.\r\n\r\n**Código http esperado: 200**\r\n\r\n**JSON de salida**\r\n```\r\n{\r\n    \"id\": 1,\r\n    \"name\": \"Buscando América\",\r\n    \"cover\": \"https://i.pinimg.com/564x/aa/5f/ed/aa5fed7fac61cc8f41d1e79db917a7cd.jpg\",\r\n    \"releaseDate\": \"1984-08-01T05:00:00.000Z\",\r\n    \"description\": \"Buscando América es el primer álbum de la banda de Rubén Blades y Seis del Solar lanzado en 1984. La producción, bajo el sello Elektra, fusiona diferentes ritmos musicales tales como la salsa, reggae, rock, y el jazz latino. El disco fue grabado en Eurosound Studios en Nueva York entre mayo y agosto de 1983.\",\r\n    \"genre\": \"Salsa\",\r\n    \"recordLabel\": \"Elektra\",\r\n    \"tracks\": [],\r\n    \"performers\": [],\r\n    \"comments\": []\r\n}\r\n```"
+			},
+			"response": []
+		},
+		{
+			"name": "Editar un album",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(responseBody);",
+							"var data = JSON.parse(responseBody);",
+							"tests[\"No genera error en el Put\"] = responseCode.code === 200;"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Buscando América\",\n    \"cover\": \"https://i.pinimg.com/564x/aa/5f/ed/aa5fed7fac61cc8f41d1e79db917a7cd.jpg\",\n    \"releaseDate\": \"1984-08-01T00:00:00-05:00\",\n    \"description\": \"Buscando América es el primer álbum de la banda de Rubén Blades y Seis del Solar lanzado en 1984. La producción, bajo el sello Elektra, fusiona diferentes ritmos musicales tales como la salsa, reggae, rock, y el jazz latino.\",\n    \"genre\": \"Salsa\",\n    \"recordLabel\": \"Elektra\"\n}"
+				},
+				"url": {
+					"raw": "backvynils-q6yc.onrender.com/albums/157",
+					"host": [
+						"backvynils-q6yc",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"albums",
+						"157"
+					]
+				},
+				"description": "Actualiza un vinilo existente. \r\n\r\nSe envía el Id en la URL de la petición.\r\n\r\n**Código http esperado: 200**\r\n\r\n**JSON de salida**\r\n\r\n```\r\n{\r\n    \"id\": 1,\r\n    \"name\": \"Buscando América\",\r\n    \"cover\": \"https://i.pinimg.com/564x/aa/5f/ed/aa5fed7fac61cc8f41d1e79db917a7cd.jpg\",\r\n    \"releaseDate\": \"1984-08-01T00:00:00-05:00\",\r\n    \"description\": \"Buscando América es el primer álbum de la banda de Rubén Blades y Seis del Solar lanzado en 1984. La producción, bajo el sello Elektra, fusiona diferentes ritmos musicales tales como la salsa, reggae, rock, y el jazz latino.\",\r\n    \"genre\": \"Salsa\",\r\n    \"recordLabel\": \"Elektra\"\r\n}\r\n```"
+			},
+			"response": []
+		},
+		{
+			"name": "Borrar un album",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"No genera error en el Delete\"] = responseCode.code === 204;"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "backvynils-q6yc.onrender.com/albums/157",
+					"host": [
+						"backvynils-q6yc",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"albums",
+						"157"
+					]
+				},
+				"description": "Borra un vinilo. Se envía el id del vinilo creado anteriormente.\n\n**Código HTTP esperado: 204**"
+			},
+			"response": []
+		},
+		{
+			"name": "Agregar Comentario",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"description\": \"This album is one of my favourites\",\r\n    \"rating\": 5,\r\n    \"collector\": {\"id\":1}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "backvynils-q6yc.onrender.com/albums/155/comments",
+					"host": [
+						"backvynils-q6yc",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"albums",
+						"155",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
